@@ -1,115 +1,110 @@
-'use client'
+'use client';
 
-import {useEffect, useRef, useState} from "react"
-import {Menu, Sun, Moon, Coffee} from 'lucide-react'
-import {ListItemProps} from "@/layout/main-layout/MainLayout.interfaces"
-import {components} from "@/layout/navigation/Navigation.constants"
-import {Button} from "@/components/ui/button"
-import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet"
+import { useEffect, useRef, useState } from 'react';
+import { Menu, Sun, Moon, Coffee } from 'lucide-react';
+import { ListItemProps } from '@/layout/main-layout/MainLayout.interfaces';
+import { components } from '@/layout/navigation/Navigation.constants';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
-} from "@/components/ui/accordion"
-import {toast} from "@/hooks/use-toast.ts";
-import {Link} from "react-router-dom";
-import RouterUrlHelper from "@/core/utils/RouterUtils"
+} from '@/components/ui/accordion';
+import { toast } from '@/hooks/use-toast.ts';
+import { Link } from 'react-router-dom';
+import RouterUrlHelper from '@/core/utils/RouterUtils';
 
-function ListItem({className = "", title, children, href}: ListItemProps) {
+function ListItem({ className = '', title, children, href }: ListItemProps) {
     return (
         <li>
             <a
                 href={href}
-                className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 ${className}`}
+                className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors 
+        hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 ${className}`}
             >
                 <div className="text-sm font-medium leading-none">{title}</div>
                 <p className="text-sm leading-snug text-gray-600">{children}</p>
             </a>
         </li>
-    )
+    );
 }
 
 export default function Header() {
-    const [activeMenu, setActiveMenu] = useState<string | null>(null)
-    const [isDarkTheme, setIsDarkTheme] = useState(false)
-    const [clicked, setClicked] = useState(false)
-    const dropdownRef = useRef<HTMLDivElement | null>(null)
+    const [activeMenu, setActiveMenu] = useState<string | null>(null);
+    const [isDarkTheme, setIsDarkTheme] = useState(false);
+    const [clicked, setClicked] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        const isDark = document.documentElement.classList.contains("dark")
-        setIsDarkTheme(isDark)
+        const isDark = document.documentElement.classList.contains('dark');
+        setIsDarkTheme(isDark);
 
         const handleClickOutside = (event: MouseEvent) => {
             if (
                 dropdownRef.current &&
                 !dropdownRef.current.contains(event.target as Node)
             ) {
-                setActiveMenu(null)
-                setClicked(false)
+                setActiveMenu(null);
+                setClicked(false);
             }
-        }
+        };
 
-        document.addEventListener("mousedown", handleClickOutside)
+        document.addEventListener('mousedown', handleClickOutside);
         return () => {
-            document.removeEventListener("mousedown", handleClickOutside)
-        }
-    }, [])
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const toggleTheme = () => {
-        setIsDarkTheme((prev) => !prev)
+        setIsDarkTheme((prev) => !prev);
 
         if (isDarkTheme) {
-            document.documentElement.classList.remove("dark")
-            document.documentElement.classList.add("light")
-            document.documentElement.style.colorScheme = "light"
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+            document.documentElement.style.colorScheme = 'light';
         } else {
-            document.documentElement.classList.remove("light")
-            document.documentElement.classList.add("dark")
-            document.documentElement.style.colorScheme = "dark"
+            document.documentElement.classList.remove('light');
+            document.documentElement.classList.add('dark');
+            document.documentElement.style.colorScheme = 'dark';
         }
-    }
+    };
 
     const handleMouseEnter = (menuName: string) => {
         if (!clicked) {
-            setActiveMenu(menuName)
+            setActiveMenu(menuName);
         }
-    }
+    };
 
     const handleMouseLeave = () => {
         if (!clicked) {
-            setActiveMenu(null)
+            setActiveMenu(null);
         }
-    }
+    };
 
     const handleMenuClick = (menuName: string) => {
         if (activeMenu === menuName && clicked) {
-            setActiveMenu(null)
-            setClicked(false)
+            setActiveMenu(null);
+            setClicked(false);
         } else {
-            setActiveMenu(menuName)
-            setClicked(true)
+            setActiveMenu(menuName);
+            setClicked(true);
         }
-    }
+    };
 
     const handleDonation = () => {
-        // Here you would typically integrate with a payment provider
-        // For this example, we'll just show a toast notification
         toast({
-            title: "Thank you!",
-            description: "Your donation is appreciated. Enjoy your virtual coffee!",
-        })
-    }
+            title: 'Thank you!',
+            description: 'Your donation is appreciated. Enjoy your virtual coffee!',
+        });
+    };
 
     return (
-        <header
-            className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:border-border">
+        <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:border-border">
             <div className="flex h-14 items-center px-4 justify-between">
                 <div className="mr-4 hidden md:flex">
-                    <a
-                        className="mr-4 flex items-center space-x-2 lg:mr-6"
-                        href="/"
-                    >
+                    <a className="mr-4 flex items-center space-x-2 lg:mr-6" href="/">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 256 256"
@@ -139,77 +134,86 @@ export default function Header() {
                                 strokeWidth="32"
                             />
                         </svg>
-                        <span className="hidden font-bold lg:inline-block">
-              shadcn/ui
-            </span>
+                        <span className="hidden font-bold lg:inline-block">shadcn/ui</span>
                     </a>
                     <nav className="relative flex items-center gap-4 text-sm xl:gap-6">
                         <ul className="flex space-x-4">
                             <li
                                 className="relative"
-                                onMouseEnter={() =>
-                                    handleMouseEnter("gettingStarted")
-                                }
+                                onMouseEnter={() => handleMouseEnter('gettingStarted')}
                                 onMouseLeave={handleMouseLeave}
                             >
                                 <button
                                     className="transition-colors hover:text-foreground/80 text-foreground/60"
-                                    onClick={() =>
-                                        handleMenuClick("gettingStarted")
-                                    }
+                                    onClick={() => handleMenuClick('gettingStarted')}
                                 >
                                     Getting started
                                 </button>
-                                {activeMenu === "gettingStarted" && (
+                                {activeMenu === 'gettingStarted' && (
                                     <div
                                         ref={dropdownRef}
-                                        className="absolute left-0 mt-2 w-max bg-white shadow-lg"
+                                        className={`absolute left-0 mt-2 w-max shadow-lg ${
+                                            isDarkTheme
+                                                ? 'bg-gray-800 text-gray-100'
+                                                : 'bg-white text-gray-900'
+                                        } dark:bg-gray-800 dark:text-gray-100`}
                                     >
                                         <ul className="grid gap-3 p-6 md:w-96 lg:grid-cols-2">
                                             <li className="row-span-3">
                                                 <a
-                                                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-gray-100 to-gray-200 p-6 no-underline outline-none focus:shadow-md"
+                                                    className={`flex h-full w-full select-none flex-col justify-end rounded-md p-6 no-underline outline-none ${
+                                                        isDarkTheme
+                                                            ? 'bg-gray-700 hover:bg-gray-600'
+                                                            : 'bg-gray-100 hover:bg-gray-200'
+                                                    }`}
                                                     href="/"
                                                 >
                                                     <div className="h-6 w-6 mb-4">
-                                                        <img
-                                                            src="/logo.svg"
-                                                            alt="Logo"
-                                                        />
+                                                        <img src="/logo.svg" alt="Logo" />
                                                     </div>
                                                     <div className="mb-2 text-lg font-medium">
                                                         Your Project Name
                                                     </div>
-                                                    <p className="text-sm leading-tight text-gray-600">
-                                                        Beautifully designed
-                                                        components that you can
-                                                        copy and paste into your
-                                                        apps. Accessible.
-                                                        Customizable. Open
-                                                        Source.
+                                                    <p className="text-sm leading-tight">
+                                                        Beautifully designed components that you can copy
+                                                        and paste into your apps. Accessible. Customizable.
+                                                        Open Source.
                                                     </p>
                                                 </a>
                                             </li>
                                             <ListItem
                                                 href="/docs"
                                                 title="Introduction"
+                                                className={`${
+                                                    isDarkTheme
+                                                        ? 'hover:bg-gray-700 hover:text-gray-300'
+                                                        : 'hover:bg-gray-100 hover:text-gray-900'
+                                                }`}
                                             >
-                                                Re-usable components built using
-                                                Radix UI and Tailwind CSS.
+                                                Re-usable components built using Radix UI and Tailwind
+                                                CSS.
                                             </ListItem>
                                             <ListItem
                                                 href="/docs/installation"
                                                 title="Installation"
+                                                className={`${
+                                                    isDarkTheme
+                                                        ? 'hover:bg-gray-700 hover:text-gray-300'
+                                                        : 'hover:bg-gray-100 hover:text-gray-900'
+                                                }`}
                                             >
-                                                How to install dependencies and
-                                                structure your app.
+                                                How to install dependencies and structure your app.
                                             </ListItem>
                                             <ListItem
                                                 href="/docs/primitives/typography"
                                                 title="Typography"
+                                                className={`${
+                                                    isDarkTheme
+                                                        ? 'hover:bg-gray-700 hover:text-gray-300'
+                                                        : 'hover:bg-gray-100 hover:text-gray-900'
+                                                }`}
                                             >
-                                                Styles for headings, paragraphs,
-                                                lists...etc
+                                                Styles for headings, paragraphs, lists...etc
                                             </ListItem>
                                         </ul>
                                     </div>
@@ -217,21 +221,23 @@ export default function Header() {
                             </li>
                             <li
                                 className="relative"
-                                onMouseEnter={() =>
-                                    handleMouseEnter("components")
-                                }
+                                onMouseEnter={() => handleMouseEnter('components')}
                                 onMouseLeave={handleMouseLeave}
                             >
                                 <button
                                     className="transition-colors hover:text-foreground/80 text-foreground/60"
-                                    onClick={() => handleMenuClick("components")}
+                                    onClick={() => handleMenuClick('components')}
                                 >
                                     Components
                                 </button>
-                                {activeMenu === "components" && (
+                                {activeMenu === 'components' && (
                                     <div
                                         ref={dropdownRef}
-                                        className="absolute left-0 mt-2 w-max bg-white shadow-lg"
+                                        className={`absolute left-0 mt-2 w-max shadow-lg ${
+                                            isDarkTheme
+                                                ? 'bg-gray-800 text-gray-100'
+                                                : 'bg-white text-gray-900'
+                                        } dark:bg-gray-800 dark:text-gray-100`}
                                     >
                                         <ul className="grid gap-3 p-4 md:w-96 md:grid-cols-2 lg:w-[600px]">
                                             {components.map((component) => (
@@ -248,7 +254,10 @@ export default function Header() {
                                 )}
                             </li>
                             <li className="relative flex items-center">
-                                <Link to={RouterUrlHelper.urlMap.projectGallery} className="transition-colors hover:text-foreground/80 text-foreground/60" >
+                                <Link
+                                    to={RouterUrlHelper.urlMap.projectGallery}
+                                    className="transition-colors hover:text-foreground/80 text-foreground/60"
+                                >
                                     Documentation
                                 </Link>
                             </li>
@@ -261,12 +270,12 @@ export default function Header() {
                             variant="ghost"
                             className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
                         >
-                            <Menu className="h-5 w-5"/>
+                            <Menu className="h-5 w-5" />
                             <span className="sr-only">Toggle Menu</span>
                         </Button>
                     </SheetTrigger>
                     <SheetContent side="left" className="pr-0">
-                        <MobileNav/>
+                        <MobileNav />
                     </SheetContent>
                 </Sheet>
                 <div className="flex flex-1 items-center gap-2 justify-end">
@@ -287,9 +296,9 @@ export default function Header() {
                             className="rounded-md transition-colors"
                         >
                             {isDarkTheme ? (
-                                <Sun className="h-5 w-5"/>
+                                <Sun className="h-5 w-5" />
                             ) : (
-                                <Moon className="h-5 w-5"/>
+                                <Moon className="h-5 w-5" />
                             )}
                             <span className="sr-only">Toggle theme</span>
                         </Button>
@@ -297,24 +306,32 @@ export default function Header() {
                 </div>
             </div>
         </header>
-    )
+    );
 }
 
 function MobileNav() {
     return (
-        <Accordion type="multiple" className="w-full">
+        <Accordion type="multiple" className="w-full pr-4 pt-6">
             <AccordionItem value="getting-started">
                 <AccordionTrigger>Getting Started</AccordionTrigger>
                 <AccordionContent>
                     <div className="flex flex-col space-y-2">
-                        <a href="/docs" className="text-sm text-muted-foreground hover:text-primary">
+                        <a
+                            href="/docs"
+                            className="text-sm text-muted-foreground hover:text-primary"
+                        >
                             Introduction
                         </a>
-                        <a href="/docs/installation" className="text-sm text-muted-foreground hover:text-primary">
+                        <a
+                            href="/docs/installation"
+                            className="text-sm text-muted-foreground hover:text-primary"
+                        >
                             Installation
                         </a>
-                        <a href="/docs/primitives/typography"
-                           className="text-sm text-muted-foreground hover:text-primary">
+                        <a
+                            href="/docs/primitives/typography"
+                            className="text-sm text-muted-foreground hover:text-primary"
+                        >
                             Typography
                         </a>
                     </div>
@@ -338,9 +355,11 @@ function MobileNav() {
             </AccordionItem>
             <AccordionItem value="documentation">
                 <AccordionTrigger>
-                    <a href="/docs" className="flex w-full">Documentation</a>
+                    <a href="/docs" className="flex w-full">
+                        Documentation
+                    </a>
                 </AccordionTrigger>
             </AccordionItem>
         </Accordion>
-    )
+    );
 }
